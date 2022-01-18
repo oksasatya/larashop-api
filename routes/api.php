@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
-
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,28 +15,9 @@ use App\Http\Controllers\BookController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('nama',function(){
-    return 'namaku,larahsop API';
-});
-
-Route::post('umur',function(){
-    return 17;
-});
-
-Route::prefix('v1')->group(function(){
-    Route::get('books',function(){
-
-    });
-
-    Route::get('categoires',function(){
-
-    });
-});
-
-Route::middleware(['throttle:10,1','cors'])->group(function(){
-    Route::get('buku/{judul}',[BookController::class,'cetak']);
+Route::prefix('v1')->group(function () {
+    Route::get('books', [BookController::class, 'index']);
+    Route::get('book/{id}', [BookController::class, 'view']); // <== tambahkan ini
+    Route::get('book', [BookController::class, 'show']);
+    Route::get('books/destroy', [BookController::class, 'destroy']);
 });

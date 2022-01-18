@@ -16,7 +16,7 @@ class bookTableSeeder extends Seeder
      */
     public function run()
     {
-        $book = [];
+        $books = [];
         $faker = Factory::create('id_ID');
         $image_categories = [
             'abstrack',
@@ -51,6 +51,6 @@ class bookTableSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ];
         }
-        DB::table('books')->insert($book);
+        DB::table('books')->insert($books);
     }
 }

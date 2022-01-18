@@ -19,10 +19,10 @@ class provinceTableSeeder extends Seeder
         $json_obj = json_decode($json_str);
         $provinces = [];
 
-        foreach ($json_obj->rajaongkir->result as $province) {
+        foreach ($json_obj->rajaongkir->results as $province) {
             $provinces[] = [
                 'id' => $province->province_id,
-                'province' => $province->province
+                'provinces' => $province->province
             ];
         }
 

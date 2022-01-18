@@ -19,7 +19,7 @@ class citiesTableSeeder extends Seeder
         $json_obj = json_decode($json_str);
         $cities = [];
 
-        foreach ($json_obj->rajaongkir->result as $city) {
+        foreach ($json_obj->rajaongkir->results as $city) {
             $cities[] = [
                 'id' => $city->city_id,
                 'province_id' => $city->province_id,
