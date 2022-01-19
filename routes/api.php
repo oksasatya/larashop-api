@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Resources\Book;
+use App\Models\book as ModelsBook;
 use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +24,13 @@ Route::prefix('v1')->group(function () {
     Route::get('book/{id}', [BookController::class, 'view']); // <== tambahkan ini
     Route::get('book', [BookController::class, 'show']);
     Route::get('books/destroy', [BookController::class, 'destroy']);
+
+    //user
+
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('logout', [AuthController::class, 'logout']);
 });
+
+
+Route::resource('categories', CategoryController::class);

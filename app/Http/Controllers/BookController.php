@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Book as ResourcesBook;
+use App\Http\Resources\Books;
 use App\Models\book;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,16 +14,8 @@ class BookController extends Controller
 
     public function index()
     {
-
-
-        $books = new book();
-        $books->title = 'learn-vue js';
-        $books->slug = Str::slug($books->title);
-        $books->description = 'contoh';
-        $books->author = 'contoh juga';
-        $books->publisher = 'oksa';
-        $books->cover = '1.jpg';
-        $books->save();
+        $books = new Books(book::paginate(5));
+        return $books;
     }
 
 
@@ -30,11 +24,6 @@ class BookController extends Controller
         return $judul;
     }
 
-    public function view($id)
-    {
-        $book = DB::select('select * from books where id = ?', [$id]);
-        return $book;
-    }
 
     public function show()
     {
