@@ -19,18 +19,19 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
+
+
 Route::prefix('v1')->group(function () {
-    Route::get('books', [BookController::class, 'index']);
-    Route::get('book/{id}', [BookController::class, 'view']); // <== tambahkan ini
-    Route::get('book', [BookController::class, 'show']);
-    Route::get('books/destroy', [BookController::class, 'destroy']);
-
-    //user
-
+    //public
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
-    Route::post('logout', [AuthController::class, 'logout']);
+
+    //private
+    Route::middleware('auth:api')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
 });
+
 
 
 Route::resource('categories', CategoryController::class);
