@@ -2,10 +2,17 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Events\Authenticated;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Exception;
 use Throwable;
+use Illuminate\Database\QueryException;
+use Illuminate\Auth\Events\Authenticated;
+
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,8 +43,61 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (Throwable $exception) {
+            $debug = config('app.debug');
+            $message = '';
+            $status_code = 500;
+            // cek jika eksepsinya dikarenakan model tidak ditemukan
+            if ($exception instanceof ModelNotFoundException) {
+                $message = 'Resource is not found';
+                $status_code = 404;
+            }
+            //  cek jika eksepsinya dikarenakan resource tidak ditemukan
+            elseif ($exception instanceof NotFoundHttpException) {
+                $message = 'Endpoint is not found';
+                $status_code = 404;
+            }
+            //  cek jika eksepsinya dikarenakan method tidak diizinkan
+            elseif ($exception instanceof MethodNotAllowedHttpException) {
+                $message = 'Method is not allowed';
+                $status_code = 405;
+            }
+            //  cek jika eksepsinya dikarenakan kegagalan validasi
+            else if ($exception instanceof ValidationException) {
+                $validationErrors = $exception->validator->errors()->getMessages();
+                $validationErrors = array_map(function ($error) {
+                    return array_map(function ($message) {
+                        return $message;
+                    }, $error);
+                }, $validationErrors);
+                $message = $validationErrors;
+                $status_code = 405;
+            }
+            //  cek jika eksepsinya dikarenakan kegagalan query
+            else if ($exception instanceof QueryException) {
+                if ($debug) {
+                    $message = $exception->getMessage();
+                } else {
+                    $message = 'Query failed to execute';
+                }
+                $status_code = 500;
+            }
+            $rendered = parent::render(request(), $exception);
+            $status_code = $rendered->getStatusCode();
+            if (empty($message)) {
+                $message = $exception->getMessage();
+            }
+            $errors = [];
+            if ($debug) {
+                $errors['exception'] = get_class($exception);
+                $errors['trace'] = explode("\n", $exception->getTraceAsString());
+            }
+            return response()->json([
+                'status'    => 'error',
+                'message'   => $message,
+                'data'      => null,
+                'errors'    => $errors,
+            ], $status_code);
         });
     }
 

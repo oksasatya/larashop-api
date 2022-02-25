@@ -25,7 +25,12 @@ Route::prefix('v1')->group(function () {
     //public
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    // category
+    Route::get('categories/random/{count}', [CategoryController::class, 'random']);
+    Route::get('categories', [CategoryController::class, 'index']);
 
+    // book
+    Route::get('books/top/{count}', [BookController::class, 'top']);
     //private
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
@@ -34,4 +39,4 @@ Route::prefix('v1')->group(function () {
 
 
 
-Route::resource('categories', CategoryController::class);
+// Route::resource('categories', CategoryController::class);
