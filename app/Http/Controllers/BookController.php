@@ -40,4 +40,11 @@ class BookController extends Controller
 
         return 'succesfully Deleted';
     }
+
+
+    public function top($count)
+    {
+        $criteria = Book::orderBy('views', 'desc')->take($count)->get();
+        return new Books($criteria);
+    }
 }

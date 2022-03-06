@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Resources\Book;
-use App\Models\book as ModelsBook;
-use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
+// header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+// header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization, Accept,charset,boundary,Content-Length');
+// header('Access-Control-Allow-Origin: *');
 
 
 Route::prefix('v1')->group(function () {
@@ -27,7 +27,7 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     // category
     Route::get('categories/random/{count}', [CategoryController::class, 'random']);
-    Route::get('categories', [CategoryController::class, 'index']);
+    // Route::get('categories', [CategoryController::class, 'index']);
 
     // book
     Route::get('books/top/{count}', [BookController::class, 'top']);

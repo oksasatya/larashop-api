@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class bookTableSeeder extends Seeder
 {
@@ -35,9 +36,9 @@ class bookTableSeeder extends Seeder
             $title = str_replace('.', '', $title);
             $slug = str_replace(' ', '-', strtolower($title));
             $category = $image_categories[mt_rand(0, 8)];
-            $cover_path = 'public/storage/images/books';
+            $cover_path = 'public/images/books';
             $cover_fullpath = $faker->image($cover_path, 300, 500, $category, true, true, $category);
-            $cover = str_replace($cover_path . '/', '', $cover_fullpath);
+            $cover = str_replace($cover_path, '', $cover_fullpath);
             $books[$i] = [
                 'title' => $title,
                 'slug' => $slug,
