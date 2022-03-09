@@ -27,7 +27,7 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     // category
     Route::get('categories/random/{count}', [CategoryController::class, 'random']);
-    // Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories', [CategoryController::class, 'index']);
 
     // book
     Route::get('books/top/{count}', [BookController::class, 'top']);
