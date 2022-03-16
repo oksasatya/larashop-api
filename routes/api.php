@@ -31,6 +31,7 @@ Route::prefix('v1')->group(function () {
 
     // book
     Route::get('books/top/{count}', [BookController::class, 'top']);
+    Route::get('books', [BookController::class, 'index']);
     //private
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
