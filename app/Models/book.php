@@ -27,4 +27,10 @@ class book extends Model
     protected $dates = [
         'deleted_at'
     ];
+
+
+    public function Category()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }
